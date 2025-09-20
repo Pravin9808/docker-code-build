@@ -1,10 +1,5 @@
 version: 0.2
 
-env:
-  secrets-manager:
-    DOCKERHUB_USERNAME: dockerhub/credentials:username
-    DOCKERHUB_PASSWORD: dockerhub/credentials:password
-
 phases:
   pre_build:
     commands:
@@ -12,11 +7,11 @@ phases:
       - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
   build:
     commands:
-      - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t my-app:latest .
   post_build:
     commands:
-      - echo Pushing the Docker image...
+      - echo Pushing the Docker image to Docker Hub...
       - docker tag my-app:latest $DOCKERHUB_USERNAME/my-app:latest
       - docker push $DOCKERHUB_USERNAME/my-app:latest
+
